@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -74,6 +75,7 @@ public class RecyclerListener implements Listener
             noExpBlock.remove(e.getBlock());
     }
     
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void putInFurnace(InventoryClickEvent event)
     {
@@ -83,9 +85,11 @@ public class RecyclerListener implements Listener
                 if (!event.getWhoClicked().hasPermission("recycler." + event.getCursor().getTypeId()))
                     event.setCancelled(true);
             }
-            else if (event.isShiftClick() && plugin.getRecyleMap().containsKey(event.getCurrentItem().getTypeId()))
+            else if (event.isShiftClick() && event.getInventory().getType().equals(InventoryType.PLAYER) && plugin.getRecyleMap().containsKey(event.getCurrentItem().getTypeId()))
                 if (!event.getWhoClicked().hasPermission("recycler." + event.getCurrentItem().getTypeId()))
                     event.setCancelled(true);
+                else
+                    ((Player) event.getWhoClicked()).updateInventory();
     }
     
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
