@@ -70,7 +70,7 @@ public class Recycler extends JavaPlugin
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
-        if (sender.hasPermission("recycler.reload"))
+        if (sender.hasPermission("recycler.admin"))
             loadMap();
         
         return true;

@@ -1,3 +1,4 @@
+disableHopper: true
 bucket:
     id: 325
     rewardid: 265

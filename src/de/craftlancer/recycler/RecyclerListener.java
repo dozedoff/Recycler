@@ -82,11 +82,11 @@ public class RecyclerListener implements Listener
         if (event.getInventory().getType().equals(InventoryType.FURNACE) && event.getRawSlot() != -999)
             if (event.getRawSlot() == 0 && plugin.getRecyleMap().containsKey(event.getCursor().getTypeId()))
             {
-                if (!event.getWhoClicked().hasPermission("recycler." + event.getCursor().getTypeId()))
+                if (!event.getWhoClicked().hasPermission("recycler.item." + event.getCursor().getTypeId()))
                     event.setCancelled(true);
             }
             else if (event.isShiftClick() && event.getInventory().getType().equals(InventoryType.PLAYER) && plugin.getRecyleMap().containsKey(event.getCurrentItem().getTypeId()))
-                if (!event.getWhoClicked().hasPermission("recycler." + event.getCurrentItem().getTypeId()))
+                if (!event.getWhoClicked().hasPermission("recycler.item." + event.getCurrentItem().getTypeId()))
                     event.setCancelled(true);
                 else
                     ((Player) event.getWhoClicked()).updateInventory();

@@ -6,8 +6,8 @@ commands:
     recycler:
         description: reloads config
 permissions:
-    recycler.reload:
+    recycler.admin:
         default: op
-    recycler.<id>:
+    recycler.item.<id>:
         default: false
         description: Allows you to recycle Items with Id <id>
