@@ -1,0 +1,7 @@
+bucket:
+    id: 325
+    rewardid: 265
+    rewardamount: 3
+    maxdura: 0
+    extradura: 0
+    calcdura: false

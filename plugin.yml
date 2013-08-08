@@ -1,0 +1,10 @@
+name: Recycler
+main: de.craftlancer.recycler.Recycler
+version: 0.1
+description: Meep Mepp
+commands:
+    recycler:
+        description: reloads config
+permissions:
+    recycler.reload:
+        default: op
