@@ -1,10 +1,13 @@
 name: Recycler
 main: de.craftlancer.recycler.Recycler
-version: 0.1
-description: Meep Mepp
+version: 1.0
+description: Recycle your useless stuff!
 commands:
     recycler:
         description: reloads config
 permissions:
     recycler.reload:
         default: op
+    recycler.<id>:
+        default: false
+        description: Allows you to recycle Items with Id <id>
