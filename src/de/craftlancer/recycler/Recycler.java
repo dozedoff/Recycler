@@ -1,5 +1,6 @@
 package de.craftlancer.recycler;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -15,7 +16,6 @@ import de.craftlancer.recycler.metrics.Metrics;
 
 public class Recycler extends JavaPlugin
 {
-    private RecyclerListener listener;
     private HashMap<Integer, Recycleable> map = new HashMap<Integer, Recycleable>();
     private FileConfiguration config;
     protected boolean preventHoppers = true;
@@ -23,9 +23,8 @@ public class Recycler extends JavaPlugin
     @Override
     public void onEnable()
     {
-        listener = new RecyclerListener(this);
-        loadMap();
-        getServer().getPluginManager().registerEvents(listener, this);
+        loadConfig();
+        getServer().getPluginManager().registerEvents(new RecyclerListener(this), this);
         
         try
         {
@@ -44,9 +43,13 @@ public class Recycler extends JavaPlugin
         config = null;
     }
     
-    private void loadMap()
+    private void loadConfig()
     {
+        if (!new File(getDataFolder().getPath(), "config.yml").exists())
+            saveDefaultConfig();
+        
         reloadConfig();
+        
         config = getConfig();
         map.clear();
         
@@ -59,7 +62,7 @@ public class Recycler extends JavaPlugin
         getLogger().info(map.size() + " recycleables loaded.");
         
         for (Recycleable rec : map.values())
-            getServer().addRecipe(new FurnaceRecipe(new ItemStack(rec.rewardid), Material.getMaterial(rec.id)));
+            getServer().addRecipe(new FurnaceRecipe(new ItemStack(rec.getRewardid()), Material.getMaterial(rec.getId())));
     }
     
     public HashMap<Integer, Recycleable> getRecyleMap()
@@ -71,7 +74,7 @@ public class Recycler extends JavaPlugin
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
         if (sender.hasPermission("recycler.admin"))
-            loadMap();
+            loadConfig();
         
         return true;
     }

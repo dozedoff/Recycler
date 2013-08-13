@@ -35,22 +35,22 @@ public class RecyclerListener implements Listener
             Recycleable rec = plugin.getRecyleMap().get(src.getTypeId());
             int amount;
             
-            if (rec.calcdura)
+            if (rec.isCalcdura())
             {
-                if ((src.getDurability() + rec.extradura) > 0)
-                    amount = (int) Math.floor(rec.rewardamount * ((rec.maxdura - src.getDurability() + rec.extradura) / rec.maxdura));
+                if ((src.getDurability() + rec.getExtradura()) > 0)
+                    amount = (int) Math.floor(rec.getRewardamount() * ((rec.getMaxdura() - src.getDurability() + rec.getExtradura()) / rec.getMaxdura()));
                 else
-                    amount = rec.rewardamount;
+                    amount = rec.getRewardamount();
                 
-                if (amount > rec.rewardamount)
-                    amount = rec.rewardamount;
+                if (amount > rec.getRewardamount())
+                    amount = rec.getRewardamount();
             }
             else
-                amount = rec.rewardamount;
+                amount = rec.getRewardamount();
             
             if (amount != 0)
             {
-                event.setResult(new ItemStack(rec.rewardid, amount));
+                event.setResult(new ItemStack(rec.getRewardid(), amount));
                 noExpBlock.add(event.getBlock());
             }
             else
