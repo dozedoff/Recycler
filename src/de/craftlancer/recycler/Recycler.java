@@ -16,7 +16,7 @@ import de.craftlancer.recycler.metrics.Metrics;
 
 public class Recycler extends JavaPlugin
 {
-    private HashMap<Integer, Recycleable> map = new HashMap<Integer, Recycleable>();
+    private HashMap<Material, Recycleable> map = new HashMap<Material, Recycleable>();
     private FileConfiguration config;
     protected boolean preventHoppers = true;
     
@@ -41,6 +41,7 @@ public class Recycler extends JavaPlugin
     {
         map.clear();
         config = null;
+        getServer().getScheduler().cancelTasks(this);
     }
     
     private void loadConfig()
@@ -57,15 +58,29 @@ public class Recycler extends JavaPlugin
         
         for (String key : config.getKeys(false))
             if (!key.equals("disableHopper"))
-                map.put(config.getInt(key + ".id", 0), new Recycleable(config.getInt(key + ".id", 0), config.getInt(key + ".rewardid", 0), config.getInt(key + ".rewardamount", 0), config.getInt(key + ".maxdura", 0), config.getInt(key + ".extradura", 0), config.getBoolean(key + ".calcdura", true)));
+            {
+                Material inputType = Material.matchMaterial(config.getString(key + ".id"));
+                Material rewardType = Material.matchMaterial(config.getString(key + ".rewardid"));
+                int amount = config.getInt(key + ".rewardamount", 0);
+                int maxdura = config.getInt(key + ".maxdura", 0);
+                int extradura = config.getInt(key + ".extradura", 0);
+                boolean calcdura = config.getBoolean(key + ".calcdura", true);
+                
+                if (inputType == null)
+                    getLogger().warning("Invalid Material: " + config.getString(key + ".id"));
+                else if (rewardType == null)
+                    getLogger().warning("Invalid Material: " + config.getString(key + ".rewardid"));
+                else if (map.put(inputType, new Recycleable(inputType, rewardType, amount, maxdura, extradura, calcdura)) != null)
+                    getLogger().warning("You have 2 configs for " + inputType.name() + "! Using the last one.");
+            }
         
         getLogger().info(map.size() + " recycleables loaded.");
         
         for (Recycleable rec : map.values())
-            getServer().addRecipe(new FurnaceRecipe(new ItemStack(rec.getRewardid()), Material.getMaterial(rec.getId())));
+            getServer().addRecipe(new FurnaceRecipe(new ItemStack(rec.getRewardType()), rec.getInputType()));
     }
     
-    public HashMap<Integer, Recycleable> getRecyleMap()
+    public HashMap<Material, Recycleable> getRecyleMap()
     {
         return map;
     }

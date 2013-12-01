@@ -1,7 +1,7 @@
 disableHopper: true
 bucket:
-    id: 325
-    rewardid: 265
+    id: BUCKET
+    rewardid: IRON_INGOT
     rewardamount: 3
     maxdura: 0
     extradura: 0

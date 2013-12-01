@@ -1,45 +1,52 @@
 package de.craftlancer.recycler;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+
 public class Recycleable
 {
-    private int id;
-    private int rewardid;
+    private Material inputType;
+    private Material rewardType;
     private int rewardamount;
     private double maxdura;
     private double extradura;
     private boolean calcdura;
     
-    public Recycleable(int id, int rewardid, int rewardamount, int maxdura, int extradura, boolean calcdura)
+    public Recycleable(Material type, Material rewardType, int rewardamount, int maxdura, int extradura, boolean calcdura)
     {
-        this.id = id;
-        this.rewardid = rewardid;
+        this.inputType = type;
+        this.rewardType = rewardType;
         this.rewardamount = rewardamount;
         this.maxdura = maxdura;
         this.extradura = extradura;
         this.calcdura = calcdura;
+        
+        Bukkit.getPluginManager().addPermission(new Permission("recycler.item." + type.name(), PermissionDefault.FALSE));
     }
     
-    public int getId()
+    public Material getInputType()
     {
-        return id;
+        return inputType;
     }
     
-    public int getRewardid()
+    public Material getRewardType()
     {
-        return rewardid;
+        return rewardType;
     }
     
-    public int getRewardamount()
+    public int getRewardAmount()
     {
         return rewardamount;
     }
     
-    public double getMaxdura()
+    public double getMaxDura()
     {
         return maxdura;
     }
     
-    public double getExtradura()
+    public double getExtraDura()
     {
         return extradura;
     }

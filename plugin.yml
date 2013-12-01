@@ -1,6 +1,6 @@
 name: Recycler
 main: de.craftlancer.recycler.Recycler
-version: 1.0.1
+version: 1.1.0
 description: Recycle your useless stuff!
 commands:
     recycler:

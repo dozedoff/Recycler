@@ -30,27 +30,27 @@ public class RecyclerListener implements Listener
     public void onSmelt(FurnaceSmeltEvent event)
     {
         ItemStack src = event.getSource();
-        if (plugin.getRecyleMap().containsKey(src.getTypeId()))
+        if (plugin.getRecyleMap().containsKey(src.getType()))
         {
-            Recycleable rec = plugin.getRecyleMap().get(src.getTypeId());
+            Recycleable rec = plugin.getRecyleMap().get(src.getType());
             int amount;
             
             if (rec.isCalcdura())
             {
-                if ((src.getDurability() + rec.getExtradura()) > 0)
-                    amount = (int) Math.floor(rec.getRewardamount() * ((rec.getMaxdura() - src.getDurability() + rec.getExtradura()) / rec.getMaxdura()));
+                if ((src.getDurability() + rec.getExtraDura()) > 0)
+                    amount = (int) Math.floor(rec.getRewardAmount() * ((rec.getMaxDura() - src.getDurability() + rec.getExtraDura()) / rec.getMaxDura()));
                 else
-                    amount = rec.getRewardamount();
+                    amount = rec.getRewardAmount();
                 
-                if (amount > rec.getRewardamount())
-                    amount = rec.getRewardamount();
+                if (amount > rec.getRewardAmount())
+                    amount = rec.getRewardAmount();
             }
             else
-                amount = rec.getRewardamount();
+                amount = rec.getRewardAmount();
             
             if (amount != 0)
             {
-                event.setResult(new ItemStack(rec.getRewardid(), amount));
+                event.setResult(new ItemStack(rec.getRewardType(), amount));
                 noExpBlock.add(event.getBlock());
             }
             else
@@ -79,17 +79,19 @@ public class RecyclerListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void putInFurnace(InventoryClickEvent event)
     {
-        if (event.getInventory().getType().equals(InventoryType.FURNACE) && event.getRawSlot() != -999)
-            if (event.getRawSlot() == 0 && plugin.getRecyleMap().containsKey(event.getCursor().getTypeId()))
-            {
-                if (!event.getWhoClicked().hasPermission("recycler.item." + event.getCursor().getTypeId()))
-                    event.setCancelled(true);
-            }
-            else if (event.isShiftClick() && event.getInventory().getType().equals(InventoryType.PLAYER) && plugin.getRecyleMap().containsKey(event.getCurrentItem().getTypeId()))
-                if (!event.getWhoClicked().hasPermission("recycler.item." + event.getCurrentItem().getTypeId()))
-                    event.setCancelled(true);
-                else
-                    ((Player) event.getWhoClicked()).updateInventory();
+        if (!event.getInventory().getType().equals(InventoryType.FURNACE) || event.getRawSlot() == -999)
+            return;
+        
+        if (event.getRawSlot() == 0 && plugin.getRecyleMap().containsKey(event.getCursor().getType()))
+        {
+            if (!event.getWhoClicked().hasPermission("recycler.item." + event.getCursor().getType().name()))
+                event.setCancelled(true);
+        }
+        else if (event.isShiftClick() && plugin.getRecyleMap().containsKey(event.getCurrentItem().getType()))
+            if (!event.getWhoClicked().hasPermission("recycler.item." + event.getCurrentItem().getType().name()))
+                event.setCancelled(true);
+            else
+                ((Player) event.getWhoClicked()).updateInventory();
     }
     
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -100,7 +102,7 @@ public class RecyclerListener implements Listener
         
         if (e.getDestination().getType().equals(InventoryType.FURNACE))
             if (e.getSource().getType().equals(InventoryType.HOPPER) || e.getSource().getType().equals(InventoryType.DROPPER))
-                if (plugin.getRecyleMap().containsKey(e.getItem().getTypeId()))
+                if (plugin.getRecyleMap().containsKey(e.getItem().getType()))
                     e.setCancelled(true);
     }
 }
