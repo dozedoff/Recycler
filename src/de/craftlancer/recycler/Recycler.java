@@ -44,6 +44,7 @@ public class Recycler extends JavaPlugin
         getServer().getScheduler().cancelTasks(this);
     }
     
+    @SuppressWarnings("deprecation")
     private void loadConfig()
     {
         if (!new File(getDataFolder().getPath(), "config.yml").exists())
@@ -77,7 +78,7 @@ public class Recycler extends JavaPlugin
         getLogger().info(map.size() + " recycleables loaded.");
         
         for (Recycleable rec : map.values())
-            getServer().addRecipe(new FurnaceRecipe(new ItemStack(rec.getRewardType()), rec.getInputType()));
+            getServer().addRecipe(new FurnaceRecipe(new ItemStack(rec.getRewardType()), rec.getInputType(), 32767));
     }
     
     public HashMap<Material, Recycleable> getRecyleMap()
