@@ -10,19 +10,25 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.craftlancer.recycler.metrics.Metrics;
+import org.mcstats.Metrics;
 
 public class Recycler extends JavaPlugin
 {
     private HashMap<Material, Recycleable> map = new HashMap<Material, Recycleable>();
     private FileConfiguration config;
     protected boolean preventHoppers = true;
+    public static Permission WILDCARD_PERMISSION;
     
     @Override
     public void onEnable()
     {
+        WILDCARD_PERMISSION = new Permission("recycler.item.*", PermissionDefault.FALSE);
+        getServer().getPluginManager().addPermission(WILDCARD_PERMISSION);
+        
         loadConfig();
         getServer().getPluginManager().registerEvents(new RecyclerListener(this), this);
         

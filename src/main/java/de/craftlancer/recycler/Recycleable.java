@@ -23,7 +23,10 @@ public class Recycleable
         this.extradura = extradura;
         this.calcdura = calcdura;
         
-        Bukkit.getPluginManager().addPermission(new Permission("recycler.item." + type.name(), PermissionDefault.FALSE));
+        Permission perm = new Permission("recycler.item." + type.name(), PermissionDefault.FALSE);
+        perm.addParent(Recycler.WILDCARD_PERMISSION, true);
+        
+        Bukkit.getPluginManager().addPermission(perm);
     }
     
     public Material getInputType()
