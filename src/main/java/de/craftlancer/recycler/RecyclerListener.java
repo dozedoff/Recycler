@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Furnace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,11 +21,12 @@ import org.bukkit.inventory.ItemStack;
 public class RecyclerListener implements Listener
 {
     private Recycler plugin;
-    private Set<Block> noExpBlock = new HashSet<Block>();
+    private Set<Block> noExpBlock;
     
     public RecyclerListener(Recycler instance)
     {
         plugin = instance;
+        noExpBlock = new HashSet<Block>();
     }
     
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -48,7 +51,7 @@ public class RecyclerListener implements Listener
             else
                 amount = rec.getRewardAmount();
             
-            if (amount != 0)
+            if (amount != 0 || !plugin.preventZeroOutput)
             {
                 event.setResult(new ItemStack(rec.getRewardType(), amount));
                 noExpBlock.add(event.getBlock());
@@ -58,13 +61,21 @@ public class RecyclerListener implements Listener
         }
     }
     
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onFurnaceExtract(FurnaceExtractEvent e)
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onFurnaceExtract(FurnaceExtractEvent e) 
     {
-        if (noExpBlock.contains(e.getBlock()))
+        Block furnaceBlock = e.getBlock();
+        BlockState furnaceState = furnaceBlock.getState();
+        
+        if (furnaceState instanceof Furnace) 
         {
-            e.setExpToDrop(0);
-            noExpBlock.remove(e.getBlock());
+            ItemStack result = ((Furnace) furnaceState).getInventory().getResult();
+             
+            if (result != null && noExpBlock.contains(furnaceBlock))
+            {
+                e.setExpToDrop(0);
+                noExpBlock.remove(furnaceBlock);
+            }
         }
     }
     
