@@ -4,9 +4,282 @@ preventZeroOutput: true
 
 # Items
 bucket:
-    id: BUCKET
-    rewardid: IRON_INGOT
-    rewardamount: 3
-    maxdura: 0
-    extradura: 0
-    calcdura: false
+  id: BUCKET
+  rewardid: IRON_INGOT
+  rewardamount: 3
+  maxdura: 0
+  extradura: 0
+  calcdura: false
+diamond_pickaxe:
+  id: DIAMOND_PICKAXE
+  rewardid: DIAMOND
+  rewardamount: 3
+  maxdura: 1562
+  extradura: 0
+  calcdura: true
+diamond_axe:
+  id: DIAMOND_AXE
+  rewardid: DIAMOND
+  rewardamount: 3
+  maxdura: 1562
+  extradura: 0
+  calcdura: true
+diamond_spade:
+  id: DIAMOND_SPADE
+  rewardid: DIAMOND
+  rewardamount: 1
+  maxdura: 1562
+  extradura: 0
+  calcdura: true
+diamond_sword:
+  id: DIAMOND_SWORD
+  rewardid: DIAMOND
+  rewardamount: 2
+  maxdura: 1562
+  extradura: 0
+  calcdura: true
+diamond_hoe:
+  id: DIAMOND_HOE
+  rewardid: DIAMOND
+  rewardamount: 2
+  maxdura: 1562
+  extradura: 0
+  calcdura: true
+iron_hoe:
+  id: IRON_HOE
+  rewardid: IRON_INGOT
+  rewardamount: 2
+  maxdura: 251
+  extradura: 0
+  calcdura: true
+iron_axe:
+  id: IRON_AXE
+  rewardid: IRON_INGOT
+  rewardamount: 3
+  maxdura: 251
+  extradura: 0
+  calcdura: true
+iron_spade:
+  id: IRON_SPADE
+  rewardid: IRON_INGOT
+  rewardamount: 1
+  maxdura: 251
+  extradura: 0
+  calcdura: true
+iron_sword:
+  id: IRON_SWORD
+  rewardid: IRON_INGOT
+  rewardamount: 2
+  maxdura: 251
+  extradura: 0
+  calcdura: true
+iron_pickaxe:
+  id: IRON_PICKAXE
+  rewardid: IRON_INGOT
+  rewardamount: 3
+  maxdura: 251
+  extradura: 0
+  calcdura: true
+gold_pickaxe:
+  id: GOLD_PICKAXE
+  rewardid: GOLD_INGOT
+  rewardamount: 3
+  maxdura: 33
+  extradura: 0
+  calcdura: true
+gold_axe:
+  id: GOLD_AXE
+  rewardid: GOLD_INGOT
+  rewardamount: 3
+  maxdura: 33
+  extradura: 0
+  calcdura: true
+gold_spade:
+  id: GOLD_SPADE
+  rewardid: GOLD_INGOT
+  rewardamount: 1
+  maxdura: 33
+  extradura: 0
+  calcdura: true
+gold_sword:
+  id: GOLD_SWORD
+  rewardid: GOLD_INGOT
+  rewardamount: 2
+  maxdura: 33
+  extradura: 0
+  calcdura: true
+gold_hoe:
+  id: GOLD_HOE
+  rewardid: GOLD_INGOT
+  rewardamount: 2
+  maxdura: 33
+  extradura: 0
+  calcdura: true
+gold_helmet:
+  id: GOLD_HELMET
+  rewardid: GOLD_INGOT
+  rewardamount: 5
+  maxdura: 78
+  extradura: 0
+  calcdura: true
+gold_chest:
+  id: GOLD_CHESTPLATE
+  rewardid: GOLD_INGOT
+  rewardamount: 8
+  maxdura: 113
+  extradura: 0
+  calcdura: true
+gold_leggings:
+  id: GOLD_LEGGINGS
+  rewardid: GOLD_INGOT
+  rewardamount: 7
+  maxdura: 106
+  extradura: 0
+  calcdura: true
+gold_boots:
+  id: GOLD_BOOTS
+  rewardid: GOLD_INGOT
+  rewardamount: 4
+  maxdura: 92
+  extradura: 0
+  calcdura: true
+iron_helmet:
+  id: IRON_HELMET
+  rewardid: IRON_INGOT
+  rewardamount: 5
+  maxdura: 166
+  extradura: 0
+  calcdura: true
+iron_chestplate:
+  id: IRON_CHESTPLATE
+  rewardid: IRON_INGOT
+  rewardamount: 8
+  maxdura: 241
+  extradura: 0
+  calcdura: true
+iron_leggings:
+  id: IRON_LEGGINGS
+  rewardid: IRON_INGOT
+  rewardamount: 7
+  maxdura: 226
+  extradura: 0
+  calcdura: true
+iron_boots:
+  id: IRON_BOOTS
+  rewardid: IRON_INGOT
+  rewardamount: 4
+  maxdura: 192
+  extradura: 0
+  calcdura: true
+diamond_helmet:
+  id: DIAMOND_HELMET
+  rewardid: DIAMOND
+  rewardamount: 5
+  maxdura: 364
+  extradura: 0
+  calcdura: true
+diamond_chestplate:
+  id: DIAMOND_CHESTPLATE
+  rewardid: DIAMOND
+  rewardamount: 8
+  maxdura: 529
+  extradura: 0
+  calcdura: true
+diamond_leggings:
+  id: DIAMOND_LEGGINGS
+  rewardid: DIAMOND
+  rewardamount: 7
+  maxdura: 496
+  extradura: 0
+  calcdura: true
+diamond_boots:
+  id: DIAMOND_BOOTS
+  rewardid: DIAMOND
+  rewardamount: 4
+  maxdura: 430
+  extradura: 0
+  calcdura: true
+shears:
+  id: SHEARS
+  rewardid: IRON_INGOT
+  rewardamount: 2
+  maxdura: 238
+  extradura: 0
+  calcdura: true
+minecart:
+  id: MINECART
+  rewardid: IRON_INGOT
+  rewardamount: 5
+  maxdura: 0
+  extradura: 0
+  calcdura: false
+compass:
+  id: COMPASS
+  rewardid: IRON_INGOT
+  rewardamount: 4
+  maxdura: 0
+  extradura: 0
+  calcdura: false
+watch:
+  id: WATCH
+  rewardid: GOLD_INGOT
+  rewardamount: 4
+  maxdura: 0
+  extradura: 0
+  calcdura: false
+irondoor:
+  id: IRON_DOOR
+  rewardid: IRON_INGOT
+  rewardamount: 6
+  maxdura: 0
+  extradura: 0
+  calcdura: false
+hopper:
+  id: HOPPER
+  rewardid: IRON_INGOT
+  rewardamount: 5
+  maxdura: 0
+  extradura: 0
+  calcdura: false
+cauldron:
+  id: CAULDRON_ITEM
+  rewardid: IRON_INGOT
+  rewardamount: 7
+  maxdura: 0
+  extradura: 0
+  calcdura: false
+flint_and_steel:
+  id: FLINT_AND_STEEL
+  rewardid: IRON_INGOT
+  rewardamount: 1
+  maxdura: 65
+  extradura: 0
+  calcdura: true
+powered_rail:
+  id: POWERED_RAIL
+  rewardid: GOLD_INGOT
+  rewardamount: 1
+  maxdura: 0
+  extradura: 0
+  calcdura: false
+detector_rail:
+  id: DETECTOR_RAIL
+  rewardid: IRON_INGOT
+  rewardamount: 1
+  maxdura: 0
+  extradura: 0
+  calcdura: false
+gold_plate:
+  id: GOLD_PLATE
+  rewardid: GOLD_INGOT
+  rewardamount: 2
+  extradura: 0
+  calcdura: false
+  maxdura: 0
+iron_plate:
+  id: IRON_PLATE
+  rewardid: IRON_INGOT
+  rewardamount: 2
+  extradura: 0
+  calcdura: false
+  maxdura: 0
