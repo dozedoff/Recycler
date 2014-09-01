@@ -52,21 +52,26 @@ public class RecyclerListener implements Listener
         }
         else
         {
-            if (!plugin.isZeroOutputDisabled())
-            {
-                FurnaceInventory inventory = ((Furnace) event.getBlock().getState()).getInventory();
-                ItemStack smelting = inventory.getSmelting();
-                
-                if (smelting.getAmount() <= 1)
-                    inventory.setSmelting(null);
-                else
-                {
-                    smelting.setAmount(smelting.getAmount() - 1);
-                    inventory.setSmelting(smelting);
-                }
-            }
-            
             event.setCancelled(true);
+            
+            if (plugin.isZeroOutputDisabled())
+                return;
+            
+            BlockState state = event.getBlock().getState();
+            
+            if (!(state instanceof Furnace))
+                return;
+            
+            FurnaceInventory inventory = ((Furnace) event.getBlock().getState()).getInventory();
+            ItemStack smelting = inventory.getSmelting();
+            
+            if (smelting.getAmount() <= 1)
+                inventory.setSmelting(null);
+            else
+            {
+                smelting.setAmount(smelting.getAmount() - 1);
+                inventory.setSmelting(smelting);
+            }
         }
     }
     
