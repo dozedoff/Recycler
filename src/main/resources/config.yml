@@ -1,4 +1,8 @@
+# General options
 disableHopper: true
+preventZeroOutput: true
+
+# Items
 bucket:
     id: BUCKET
     rewardid: IRON_INGOT

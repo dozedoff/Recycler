@@ -21,6 +21,7 @@ public class Recycler extends JavaPlugin
     private HashMap<Material, Recycleable> map = new HashMap<Material, Recycleable>();
     private FileConfiguration config;
     protected boolean preventHoppers = true;
+    protected boolean preventZeroOutput = true;
     public static Permission WILDCARD_PERMISSION;
     
     @Override
@@ -61,10 +62,11 @@ public class Recycler extends JavaPlugin
         config = getConfig();
         map.clear();
         
+        preventZeroOutput = config.getBoolean("preventZeroOutput", true);
         preventHoppers = config.getBoolean("disableHopper", true);
         
         for (String key : config.getKeys(false))
-            if (!key.equals("disableHopper"))
+            if (!key.equals("disableHopper") && !key.equals("preventZeroOutput"))
             {
                 Material inputType = Material.matchMaterial(config.getString(key + ".id"));
                 Material rewardType = Material.matchMaterial(config.getString(key + ".rewardid"));
