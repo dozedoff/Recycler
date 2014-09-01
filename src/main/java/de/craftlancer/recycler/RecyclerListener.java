@@ -16,10 +16,14 @@ import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
 
 public class RecyclerListener implements Listener
 {
+    private static final int INPUT_SLOT = 0;
+    private static final int OUTSIDE_SLOT = -999;
+    
     private Recycler plugin;
     private Set<Block> noExpBlock;
     
@@ -29,54 +33,59 @@ public class RecyclerListener implements Listener
         noExpBlock = new HashSet<Block>();
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onSmelt(FurnaceSmeltEvent event)
     {
         ItemStack src = event.getSource();
-        if (plugin.getRecyleMap().containsKey(src.getType()))
+        
+        if (!plugin.hasRecycleable(src.getType()))
+            return;
+        
+        Recycleable rec = plugin.getRecycleable(src.getType());
+        
+        int amount = rec.calculateAmount(src);
+        
+        if (amount != 0)
         {
-            Recycleable rec = plugin.getRecyleMap().get(src.getType());
-            int amount;
-            
-            if (rec.isCalcdura())
+            event.setResult(new ItemStack(rec.getRewardType(), amount));
+            noExpBlock.add(event.getBlock());
+        }
+        else
+        {
+            if (!plugin.isZeroOutputDisabled())
             {
-                if ((src.getDurability() + rec.getExtraDura()) > 0)
-                    amount = (int) Math.floor(rec.getRewardAmount() * ((rec.getMaxDura() - src.getDurability() + rec.getExtraDura()) / rec.getMaxDura()));
-                else
-                    amount = rec.getRewardAmount();
+                FurnaceInventory inventory = ((Furnace) event.getBlock().getState()).getInventory();
+                ItemStack smelting = inventory.getSmelting();
                 
-                if (amount > rec.getRewardAmount())
-                    amount = rec.getRewardAmount();
+                if (smelting.getAmount() <= 1)
+                    inventory.setSmelting(null);
+                else
+                {
+                    smelting.setAmount(smelting.getAmount() - 1);
+                    inventory.setSmelting(smelting);
+                }
             }
-            else
-                amount = rec.getRewardAmount();
             
-            if (amount != 0 || !plugin.preventZeroOutput)
-            {
-                event.setResult(new ItemStack(rec.getRewardType(), amount));
-                noExpBlock.add(event.getBlock());
-            }
-            else
-                event.setCancelled(true);
+            event.setCancelled(true);
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onFurnaceExtract(FurnaceExtractEvent e) 
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onFurnaceExtract(FurnaceExtractEvent e)
     {
         Block furnaceBlock = e.getBlock();
         BlockState furnaceState = furnaceBlock.getState();
         
-        if (furnaceState instanceof Furnace) 
-        {
-            ItemStack result = ((Furnace) furnaceState).getInventory().getResult();
-             
-            if (result != null && noExpBlock.contains(furnaceBlock))
-            {
-                e.setExpToDrop(0);
-                noExpBlock.remove(furnaceBlock);
-            }
-        }
+        if (!(furnaceState instanceof Furnace))
+            return;
+        
+        if (!noExpBlock.contains(furnaceBlock))
+            return;
+        
+        if (e.getItemType() != null)
+            e.setExpToDrop(0);
+        
+        noExpBlock.remove(furnaceBlock);
     }
     
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -87,33 +96,49 @@ public class RecyclerListener implements Listener
     }
     
     @SuppressWarnings("deprecation")
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void putInFurnace(InventoryClickEvent event)
     {
-        if (!event.getInventory().getType().equals(InventoryType.FURNACE) || event.getRawSlot() == -999)
+        if (!event.getInventory().getType().equals(InventoryType.FURNACE) || event.getRawSlot() == OUTSIDE_SLOT)
             return;
         
-        if (event.getRawSlot() == 0 && plugin.getRecyleMap().containsKey(event.getCursor().getType()))
-        {
-            if (!event.getWhoClicked().hasPermission("recycler.item." + event.getCursor().getType().name()))
-                event.setCancelled(true);
-        }
-        else if (event.isShiftClick() && plugin.getRecyleMap().containsKey(event.getCurrentItem().getType()))
-            if (!event.getWhoClicked().hasPermission("recycler.item." + event.getCurrentItem().getType().name()))
-                event.setCancelled(true);
-            else
-                ((Player) event.getWhoClicked()).updateInventory();
+        ItemStack item = null;
+        
+        if (event.getRawSlot() == INPUT_SLOT)
+            item = event.getCursor();
+        else if (event.isShiftClick())
+            item = event.getCurrentItem();
+        else
+            return;
+        
+        if (item == null || !plugin.hasRecycleable(item.getType()))
+            return;
+        
+        Recycleable rec = plugin.getRecycleable(item.getType());
+        
+        if (!event.getWhoClicked().hasPermission(rec.getPermission()))
+            event.setCancelled(true);
+        else if (event.isShiftClick())
+            ((Player) event.getWhoClicked()).updateInventory();
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onInventoryMove(InventoryMoveItemEvent e)
     {
-        if (!plugin.preventHoppers)
+        if (!plugin.isHopperDisabled())
             return;
         
-        if (e.getDestination().getType().equals(InventoryType.FURNACE))
-            if (e.getSource().getType().equals(InventoryType.HOPPER) || e.getSource().getType().equals(InventoryType.DROPPER))
-                if (plugin.getRecyleMap().containsKey(e.getItem().getType()))
-                    e.setCancelled(true);
+        InventoryType source = e.getSource().getType();
+        
+        if (!source.equals(InventoryType.HOPPER) && !source.equals(InventoryType.DROPPER))
+            return;
+        
+        if (!e.getDestination().getType().equals(InventoryType.FURNACE))
+            return;
+        
+        if (!plugin.hasRecycleable(e.getItem().getType()))
+            return;
+        
+        e.setCancelled(true);
     }
 }

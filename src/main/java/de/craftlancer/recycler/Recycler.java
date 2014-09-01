@@ -18,19 +18,22 @@ import org.mcstats.Metrics;
 
 public class Recycler extends JavaPlugin
 {
+    public static final Permission WILDCARD_PERMISSION = new Permission("recycler.item.*", PermissionDefault.FALSE);
+    
+    //used to let MC know, that a recipe accepts all data 
+    //this is implementation specific and may cause problems in older or future versions!
+    public static final int MATCH_ALL_DATA = 32767;
+    
     private HashMap<Material, Recycleable> map = new HashMap<Material, Recycleable>();
     private FileConfiguration config;
-    protected boolean preventHoppers = true;
-    protected boolean preventZeroOutput = true;
-    public static Permission WILDCARD_PERMISSION;
+    private boolean preventHoppers = true;
+    private boolean preventZeroOutput = true;
     
     @Override
     public void onEnable()
     {
-        WILDCARD_PERMISSION = new Permission("recycler.item.*", PermissionDefault.FALSE);
-        getServer().getPluginManager().addPermission(WILDCARD_PERMISSION);
-        
         loadConfig();
+        getServer().getPluginManager().addPermission(WILDCARD_PERMISSION);
         getServer().getPluginManager().registerEvents(new RecyclerListener(this), this);
         
         try
@@ -86,12 +89,32 @@ public class Recycler extends JavaPlugin
         getLogger().info(map.size() + " recycleables loaded.");
         
         for (Recycleable rec : map.values())
-            getServer().addRecipe(new FurnaceRecipe(new ItemStack(rec.getRewardType()), rec.getInputType(), 32767));
+            getServer().addRecipe(new FurnaceRecipe(new ItemStack(rec.getRewardType()), rec.getInputType(), MATCH_ALL_DATA));
+    }
+    
+    public boolean isZeroOutputDisabled()
+    {
+        return preventZeroOutput;
+    }
+    
+    public boolean isHopperDisabled()
+    {
+        return preventHoppers;
     }
     
     public HashMap<Material, Recycleable> getRecyleMap()
     {
         return map;
+    }
+    
+    public boolean hasRecycleable(Material mat)
+    {
+        return map.containsKey(mat);
+    }
+    
+    public Recycleable getRecycleable(Material mat)
+    {
+        return map.get(mat);
     }
     
     @Override

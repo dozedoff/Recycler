@@ -2,17 +2,20 @@ package de.craftlancer.recycler;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 public class Recycleable
 {
-    private Material inputType;
-    private Material rewardType;
-    private int rewardamount;
-    private double maxdura;
-    private double extradura;
-    private boolean calcdura;
+    private final Material inputType;
+    private final Material rewardType;
+    private final int rewardamount;
+    private final double maxdura;
+    private final double extradura;
+    private final boolean calcdura;
+    
+    private final Permission perm;
     
     public Recycleable(Material type, Material rewardType, int rewardamount, int maxdura, int extradura, boolean calcdura)
     {
@@ -23,10 +26,11 @@ public class Recycleable
         this.extradura = extradura;
         this.calcdura = calcdura;
         
-        Permission perm = new Permission("recycler.item." + type.name(), PermissionDefault.FALSE);
+        perm = new Permission("recycler.item." + type.name(), PermissionDefault.FALSE);
         perm.addParent(Recycler.WILDCARD_PERMISSION, true);
         
-        Bukkit.getPluginManager().addPermission(perm);
+        if (Bukkit.getPluginManager().getPermission(perm.getName()) == null)
+            Bukkit.getPluginManager().addPermission(perm);
     }
     
     public Material getInputType()
@@ -44,12 +48,12 @@ public class Recycleable
         return rewardamount;
     }
     
-    public double getMaxDura()
+    public double getMaxDurability()
     {
         return maxdura;
     }
     
-    public double getExtraDura()
+    public double getExtraDurability()
     {
         return extradura;
     }
@@ -57,5 +61,23 @@ public class Recycleable
     public boolean isCalcdura()
     {
         return calcdura;
+    }
+    
+    public int calculateAmount(ItemStack src)
+    {
+        if (!isCalcdura())
+            return getRewardAmount();
+        
+        int amount = 0;
+        
+        if (src.getDurability() + getExtraDurability() >= 0)
+            amount = (int) Math.floor(getRewardAmount() * ((getMaxDurability() - src.getDurability() + getExtraDurability()) / getMaxDurability()));
+        
+        return amount > getRewardAmount() ? getRewardAmount() : amount;
+    }
+
+    public Permission getPermission()
+    {
+        return perm;
     }
 }
