@@ -1,7 +1,6 @@
 package de.craftlancer.recycler;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.bukkit.Material;
@@ -13,8 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import org.mcstats.Metrics;
 
 public class Recycler extends JavaPlugin
 {
@@ -35,15 +32,6 @@ public class Recycler extends JavaPlugin
         loadConfig();
         getServer().getPluginManager().addPermission(WILDCARD_PERMISSION);
         getServer().getPluginManager().registerEvents(new RecyclerListener(this), this);
-        
-        try
-        {
-            Metrics metrics = new Metrics(this);
-            metrics.start();
-        }
-        catch (IOException e)
-        {
-        }
     }
     
     @Override
